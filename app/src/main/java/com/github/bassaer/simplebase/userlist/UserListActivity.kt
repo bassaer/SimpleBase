@@ -1,17 +1,16 @@
-package com.github.bassaer.simplebase
+package com.github.bassaer.simplebase.userlist
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
+import com.github.bassaer.simplebase.R
+import kotlinx.android.synthetic.main.counter_act.*
 
-class MainActivity : AppCompatActivity() {
-
+class UserListActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.userlist_act)
         setSupportActionBar(toolbar)
 
         setSupportActionBar(findViewById(R.id.toolbar))
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add( R.id.contentFrame, CounterFragment())
+        transaction.add(R.id.contentFrame, UserListFragment())
         transaction.commit()
     }
 
