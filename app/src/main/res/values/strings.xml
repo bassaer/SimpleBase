@@ -5,4 +5,5 @@
     <string name="dialog_title">New User</string>
     <string name="positive_button">OK</string>
     <string name="negative_button">Cancel</string>
+    <string name="username">Username</string>
 </resources>
