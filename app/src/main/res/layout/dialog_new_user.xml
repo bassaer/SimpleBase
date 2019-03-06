@@ -8,6 +8,8 @@
             android:id="@+id/dialog_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionDone"
             android:hint="@string/username"/>
 
 </LinearLayout>
