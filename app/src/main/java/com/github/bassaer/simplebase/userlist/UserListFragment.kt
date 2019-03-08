@@ -1,5 +1,6 @@
 package com.github.bassaer.simplebase.userlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.bassaer.simplebase.R
+import com.github.bassaer.simplebase.counter.CounterActivity
+import com.github.bassaer.simplebase.counter.CounterFragment
 import com.github.bassaer.simplebase.data.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -27,7 +30,10 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
         viewAdapter = UserListAdapter(users).apply {
             setOnItemClickListener(object : UserListAdapter.OnItemClickListener {
                 override fun onClick(user: User) {
-                    Toast.makeText(requireContext(), user.name, Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(requireContext(), CounterActivity::class.java)
+                    intent.putExtra(CounterFragment.ARGUMENT_USER_ID, user.id)
+                    startActivity(intent)
                 }
             })
         }
@@ -47,6 +53,7 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
         }
         return root
     }
+
     override fun onClickPositiveButton(input: String) {
         users.add(User(users.size, input, 0))
         viewAdapter.notifyDataSetChanged()

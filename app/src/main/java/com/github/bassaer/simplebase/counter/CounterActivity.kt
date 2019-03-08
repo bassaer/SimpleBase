@@ -19,9 +19,10 @@ class CounterActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
-
+        val userId = intent.getIntExtra(CounterFragment.ARGUMENT_USER_ID, 0)
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.contentFrame, CounterFragment())
+        val fragment = supportFragmentManager.findFragmentById(R.id.contentFrame) as CounterFragment?
+        transaction.add(R.id.contentFrame, fragment ?: CounterFragment.newInstance(userId))
         transaction.commit()
     }
 
