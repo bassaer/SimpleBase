@@ -23,8 +23,14 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.userlist_frag, container, false)
         users = arrayListOf(User(0, "user1", 0))
-        viewAdapter = UserListAdapter(users)
         viewManager = LinearLayoutManager(requireContext())
+        viewAdapter = UserListAdapter(users).apply {
+            setOnItemClickListener(object : UserListAdapter.OnItemClickListener {
+                override fun onClick(user: User) {
+                    Toast.makeText(requireContext(), user.name, Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
         recyclerView = root.findViewById<RecyclerView>(R.id.user_list).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
