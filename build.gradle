@@ -7,7 +7,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.21'
     }
 }
@@ -35,6 +35,8 @@ ext {
     coreKtxVer = '1.1.0-alpha04'
     constraintLahyoutVer = '1.1.3'
     materialVer = '1.1.0-alpha04'
+    roomVer = '2.0.0-rc01'
+    lifecycleVer = '2.1.0-alpha02'
     junitVer = '4.12'
     testRunnerVer = '1.1.2-alpha01'
     espressoCoreVer = '3.1.2-alpha01'
