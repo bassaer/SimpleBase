@@ -1,18 +1,20 @@
 package com.github.bassaer.simplebase.counter
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.github.bassaer.simplebase.R
 import com.github.bassaer.simplebase.data.User
 import com.github.bassaer.simplebase.data.UserDatabase
 
 class CounterFragment: Fragment() {
-    private var count = 0
     lateinit var user: User
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,6 +38,16 @@ class CounterFragment: Fragment() {
             user.count += 1
             textView.text = (user.count).toString()
         }
+        activity?.addOnBackPressedCallback(this, object : OnBackPressedCallback {
+            override fun handleOnBackPressed(): Boolean {
+                val indent = Intent()
+                indent.putExtra(ARGUMENT_USER_ID, user.id)
+                activity?.setResult(RESULT_OK, indent)
+                activity?.finish()
+                return true
+            }
+
+        })
         return view
     }
 
@@ -44,6 +56,7 @@ class CounterFragment: Fragment() {
         val dao = UserDatabase.getInstance(requireContext()).userDao()
         dao.save(user)
     }
+
 
     companion object {
         const val ARGUMENT_USER_ID = "USER_ID"

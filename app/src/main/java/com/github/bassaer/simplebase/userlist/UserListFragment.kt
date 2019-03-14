@@ -1,5 +1,6 @@
 package com.github.bassaer.simplebase.userlist
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -34,7 +35,7 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
                 override fun onClick(user: User) {
                     val intent = Intent(requireContext(), CounterActivity::class.java)
                     intent.putExtra(CounterFragment.ARGUMENT_USER_ID, user.id)
-                    startActivity(intent)
+                    startActivityForResult(intent, COUNTER_REQUEST)
                 }
             })
         }
@@ -57,9 +58,38 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
 
     override fun onClickPositiveButton(input: String) {
         val dao = UserDatabase.getInstance(requireContext()).userDao()
-        dao.create(User(name = input, count = 0))
+        val user = User(name = input, count = 0)
+        dao.create(user)
+        users.add(user)
         viewAdapter.notifyDataSetChanged()
         Toast.makeText(requireContext(), getString(R.string.ok_message), Toast.LENGTH_SHORT).show()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode != COUNTER_REQUEST || resultCode != RESULT_OK) {
+            return
+        }
+        data?.extras?.let {
+            val id = it.getLong(CounterFragment.ARGUMENT_USER_ID, -1)
+            if (id < 0) {
+                return
+            }
+            val userDao = UserDatabase.getInstance(requireContext()).userDao()
+            val updateUser = userDao.findById(id)
+
+            for ((index, user) in users.withIndex()) {
+                if (updateUser.id == user.id) {
+                    users[index] = updateUser
+                    viewAdapter.notifyItemChanged(index)
+                    break
+                }
+            }
+
+
+        }
+    }
+
+    companion object {
+        const val COUNTER_REQUEST = 0
+    }
 }
