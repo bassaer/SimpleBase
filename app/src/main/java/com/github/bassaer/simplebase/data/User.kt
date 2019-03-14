@@ -1,3 +1,12 @@
 package com.github.bassaer.simplebase.data
 
-data class User(val id: Int, val name: String, var count:Int)
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class User(
+    @PrimaryKey(autoGenerate = false) var id: Long = 0L,
+    @ColumnInfo(name = "name") var name: String,
+    @ColumnInfo(name = "count") var count:Int
+)

@@ -31,7 +31,6 @@ class UserListAdapter(private val userList: MutableList<User>):
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-
         val cell = LayoutInflater.from(parent.context).inflate(R.layout.user_cell, parent, false)
         return UserViewHolder(cell)
     }

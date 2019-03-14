@@ -1,5 +1,6 @@
 package com.github.bassaer.simplebase.userlist
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.github.bassaer.simplebase.R
 import com.github.bassaer.simplebase.counter.CounterActivity
 import com.github.bassaer.simplebase.counter.CounterFragment
 import com.github.bassaer.simplebase.data.User
+import com.github.bassaer.simplebase.data.UserDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
@@ -25,15 +27,15 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.userlist_frag, container, false)
-        users = arrayListOf(User(0, "user1", 0))
+        val userDao = UserDatabase.getInstance(requireContext()).userDao()
+        users = userDao.findAll()
         viewManager = LinearLayoutManager(requireContext())
         viewAdapter = UserListAdapter(users).apply {
             setOnItemClickListener(object : UserListAdapter.OnItemClickListener {
                 override fun onClick(user: User) {
-
                     val intent = Intent(requireContext(), CounterActivity::class.java)
                     intent.putExtra(CounterFragment.ARGUMENT_USER_ID, user.id)
-                    startActivity(intent)
+                    startActivityForResult(intent, COUNTER_REQUEST)
                 }
             })
         }
@@ -55,9 +57,39 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
     }
 
     override fun onClickPositiveButton(input: String) {
-        users.add(User(users.size, input, 0))
+        val dao = UserDatabase.getInstance(requireContext()).userDao()
+        val user = User(name = input, count = 0)
+        dao.create(user)
+        users.add(user)
         viewAdapter.notifyDataSetChanged()
         Toast.makeText(requireContext(), getString(R.string.ok_message), Toast.LENGTH_SHORT).show()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode != COUNTER_REQUEST || resultCode != RESULT_OK) {
+            return
+        }
+        data?.extras?.let {
+            val id = it.getLong(CounterFragment.ARGUMENT_USER_ID, -1)
+            if (id < 0) {
+                return
+            }
+            val userDao = UserDatabase.getInstance(requireContext()).userDao()
+            val updateUser = userDao.findById(id)
+
+            for ((index, user) in users.withIndex()) {
+                if (updateUser.id == user.id) {
+                    users[index] = updateUser
+                    viewAdapter.notifyItemChanged(index)
+                    break
+                }
+            }
+
+
+        }
+    }
+
+    companion object {
+        const val COUNTER_REQUEST = 0
+    }
 }
