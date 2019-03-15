@@ -7,13 +7,15 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-public interface UserDao {
+interface UserDao {
     @Insert(onConflict = REPLACE)
     fun create(user: User)
     @Update
     fun save(user: User)
     @Query("SELECT * FROM user WHERE id = :userId")
-    fun findById(userId: Long): User
+    fun findById(userId: String): User
     @Query("SELECT * FROM user")
     fun findAll(): MutableList<User>
+    @Query("DELETE FROM user")
+    fun removeAll()
 }
