@@ -7,13 +7,13 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.ext.compileSdkVer
     defaultConfig {
         applicationId "com.github.bassaer.simplebase"
-        minSdkVersion 15
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVer
+        targetSdkVersion rootProject.ext.targetSdkVer
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,12 +26,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVer"
     implementation "androidx.appcompat:appcompat:$appcompatVer"
     implementation "androidx.core:core-ktx:$coreKtxVer"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLahyoutVer"
     implementation "com.google.android.material:material:$materialVer"
-    //implementation "androidx.room:room-compiler:$roomCompilerVer"
     implementation "androidx.room:room-runtime:$roomVer"
     kapt "androidx.room:room-compiler:$roomVer"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVer"
