@@ -7,8 +7,10 @@
     <string name="positive_button">OK</string>
     <string name="negative_button">Cancel</string>
     <string name="username">Username</string>
+    <string name="repo">Repository</string>
     <string name="ok_message">Success!</string>
     <string name="ng_message">Error!</string>
     <string name="save_title">Save?</string>
     <string name="no_data_message">No Data</string>
+    <string name="github">GitHub</string>
 </resources>
