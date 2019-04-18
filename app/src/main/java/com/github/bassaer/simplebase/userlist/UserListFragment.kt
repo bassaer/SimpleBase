@@ -14,6 +14,7 @@ import com.github.bassaer.simplebase.counter.CounterActivity
 import com.github.bassaer.simplebase.counter.CounterFragment
 import com.github.bassaer.simplebase.data.User
 import com.github.bassaer.simplebase.data.UserDatabase
+import com.github.bassaer.simplebase.github.GitHubActivity
 import com.github.bassaer.simplebase.util.EmptyRecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -21,14 +22,12 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
 
     private lateinit var recyclerView: EmptyRecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var users: MutableList<User>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.userlist_frag, container, false)
         val userDao = UserDatabase.getInstance(requireContext()).userDao()
         users = userDao.findAll()
-        viewManager = LinearLayoutManager(requireContext())
         viewAdapter = UserListAdapter(users).apply {
             setOnItemClickListener(object : UserListAdapter.OnItemClickListener {
                 override fun onClick(user: User) {
@@ -40,7 +39,7 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
         }
         recyclerView = root.findViewById<EmptyRecyclerView>(R.id.user_list).apply {
             setHasFixedSize(true)
-            layoutManager = viewManager
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = viewAdapter
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             setEmptyView(root.findViewById(R.id.empty_view))
@@ -102,6 +101,11 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
                 dao.removeAll()
                 users.clear()
                 viewAdapter.notifyDataSetChanged()
+                return true
+            }
+            R.id.action_github -> {
+                val intent = Intent(requireContext(), GitHubActivity::class.java)
+                startActivity(intent)
                 return true
             }
             else -> super.onOptionsItemSelected(item)

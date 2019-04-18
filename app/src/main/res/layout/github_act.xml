@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".counter.CounterActivity">
+        tools:context=".github.GitHubActivity">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
@@ -29,11 +29,11 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/new_user_fab"
+            android:id="@+id/reload_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_person_add"/>
+            app:srcCompat="@drawable/ic_action_search"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
