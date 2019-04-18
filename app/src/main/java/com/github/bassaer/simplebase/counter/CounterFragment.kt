@@ -30,14 +30,12 @@ class CounterFragment: Fragment() {
             user.count += 1
             textView.text = (user.count).toString()
         }
-        activity?.addOnBackPressedCallback(this, object : OnBackPressedCallback {
-            override fun handleOnBackPressed(): Boolean {
-                val indent = Intent()
-                indent.putExtra(ARGUMENT_USER_ID, user.id)
-                activity?.setResult(RESULT_OK, indent)
-                activity?.finish()
-                return true
-            }
+        activity?.onBackPressedDispatcher?.addCallback(this, OnBackPressedCallback {
+            val indent = Intent()
+            indent.putExtra(ARGUMENT_USER_ID, user.id)
+            activity?.setResult(RESULT_OK, indent)
+            activity?.finish()
+            true
         })
         return view
     }
