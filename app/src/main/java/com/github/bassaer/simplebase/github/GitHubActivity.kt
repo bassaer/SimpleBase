@@ -18,7 +18,7 @@ class GitHubActivity: AppCompatActivity() {
         }
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.contentFrame, GithubFragment())
+        transaction.add(R.id.contentFrame, GitHubFragment())
         transaction.commit()
     }
 }
