@@ -11,54 +11,32 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:ellipsize="end"
-            android:layout_marginLeft="@dimen/cell_margin"
-            android:layout_marginTop="@dimen/cell_margin"
-            android:layout_marginRight="@dimen/cell_margin"
+            android:layout_margin="@dimen/cell_margin"
             android:text="@string/repo"
             android:textSize="@dimen/font_normal"
             android:textColor="@android:color/black"/>
 
-    <LinearLayout
-            android:orientation="horizontal"
+    <TextView
+            android:id="@+id/repo_language"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cell_margin"
+            android:drawableStart="@drawable/ic_code"
+            android:drawablePadding="@dimen/cell_padding"
+            android:text="@string/default_none"
+            android:textSize="@dimen/font_small"
+            android:layout_gravity="center_vertical"/>
 
-        <ImageView
-                android:layout_width="@dimen/icon_small"
-                android:layout_height="@dimen/icon_small"
-                android:layout_margin="@dimen/cell_margin"
-                android:contentDescription="@string/default_none"
-                android:src="@drawable/ic_code"/>
 
-        <TextView
-                android:id="@+id/repo_language"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/default_none"
-                android:textSize="@dimen/font_small"
-                android:layout_gravity="center_vertical"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:orientation="horizontal"
+    <TextView
+            android:id="@+id/repo_stars"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <ImageView
-                android:layout_width="@dimen/icon_small"
-                android:layout_height="@dimen/icon_small"
-                android:layout_margin="@dimen/cell_margin"
-                android:contentDescription="@string/default_none"
-                android:src="@drawable/ic_star_rate"/>
-
-        <TextView
-                android:id="@+id/repo_stars"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/default_count"
-                android:textSize="@dimen/font_small"
-                android:layout_gravity="center_vertical"/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cell_margin"
+            android:drawableStart="@drawable/ic_star_rate"
+            android:drawablePadding="@dimen/cell_padding"
+            android:text="@string/default_count"
+            android:textSize="@dimen/font_small"
+            android:layout_gravity="center_vertical"/>
 
 </LinearLayout>
