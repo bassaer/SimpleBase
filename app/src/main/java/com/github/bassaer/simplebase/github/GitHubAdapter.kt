@@ -7,10 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.bassaer.simplebase.R
 
-class GitHubAdapter(private val repos: MutableList<String>): RecyclerView.Adapter<GitHubAdapter.RepoViewHolder>() {
+class GitHubAdapter(private val repos: MutableList<RepoResponse>): RecyclerView.Adapter<GitHubAdapter.RepoViewHolder>() {
 
     class RepoViewHolder(cell: View): RecyclerView.ViewHolder(cell) {
-        var textView: TextView = cell.findViewById(R.id.repo_name)
+        var repoName: TextView = cell.findViewById(R.id.repo_name)
+        var repoLanguagew: TextView = cell.findViewById(R.id.repo_language)
+        var repoStarts: TextView = cell.findViewById(R.id.repo_stars)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder {
@@ -21,6 +23,8 @@ class GitHubAdapter(private val repos: MutableList<String>): RecyclerView.Adapte
     override fun getItemCount() = repos.size
 
     override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
-        holder.textView.text = repos[position]
+        holder.repoName.text = repos[position].name
+        holder.repoLanguagew.text = repos[position].language
+        holder.repoStarts.text = repos[position].star.toString()
     }
 }
