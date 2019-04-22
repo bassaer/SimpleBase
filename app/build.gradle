@@ -36,6 +36,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintLahyoutVer"
     implementation "com.google.android.material:material:$materialVer"
     implementation "androidx.room:room-runtime:$roomVer"
+    implementation "androidx.room:room-ktx:$roomVer"
     kapt "androidx.room:room-compiler:$roomVer"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVer"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVer"

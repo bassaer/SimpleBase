@@ -17,8 +17,11 @@ import com.github.bassaer.simplebase.data.UserDatabase
 import com.github.bassaer.simplebase.github.GitHubActivity
 import com.github.bassaer.simplebase.util.EmptyRecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
+class UserListFragment : Fragment(), NewUserDialogFragment.NoticeDialogListener {
 
     private lateinit var recyclerView: EmptyRecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -27,26 +30,29 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.userlist_frag, container, false)
         val userDao = UserDatabase.getInstance(requireContext()).userDao()
-        users = userDao.findAll()
-        viewAdapter = UserListAdapter(users).apply {
-            setOnItemClickListener(object : UserListAdapter.OnItemClickListener {
-                override fun onClick(user: User) {
-                    val intent = Intent(requireContext(), CounterActivity::class.java)
-                    intent.putExtra(CounterFragment.ARGUMENT_USER_ID, user.id)
-                    startActivityForResult(intent, COUNTER_REQUEST)
-                }
-            })
+        GlobalScope.launch(Dispatchers.Main){
+            users = userDao.findAll()
+            viewAdapter = UserListAdapter(users).apply {
+                setOnItemClickListener(object : UserListAdapter.OnItemClickListener {
+                    override fun onClick(user: User) {
+                        val intent = Intent(requireContext(), CounterActivity::class.java)
+                        intent.putExtra(CounterFragment.ARGUMENT_USER_ID, user.id)
+                        startActivityForResult(intent, COUNTER_REQUEST)
+                    }
+                })
+            }
+            recyclerView = root.findViewById<EmptyRecyclerView>(R.id.user_list).apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = viewAdapter
+                addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+                setEmptyView(root.findViewById(R.id.empty_view))
+            }
         }
-        recyclerView = root.findViewById<EmptyRecyclerView>(R.id.user_list).apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = viewAdapter
-            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-            setEmptyView(root.findViewById(R.id.empty_view))
-        }
+
         activity?.findViewById<FloatingActionButton>(R.id.new_user_fab)?.setOnClickListener {
             activity?.let {
-                val dialog =  NewUserDialogFragment()
+                val dialog = NewUserDialogFragment()
                 dialog.setTargetFragment(this, 0)
                 dialog.show(it.supportFragmentManager, tag)
             }
@@ -61,9 +67,11 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
         }
         val dao = UserDatabase.getInstance(requireContext()).userDao()
         val user = User(name = input, count = 0)
-        dao.create(user)
-        users.add(user)
-        viewAdapter.notifyDataSetChanged()
+        GlobalScope.launch(Dispatchers.Main) {
+            dao.create(user)
+            users.add(user)
+            viewAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -73,13 +81,14 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
         data?.extras?.let {
             val id = it.getString(CounterFragment.ARGUMENT_USER_ID) ?: return
             val userDao = UserDatabase.getInstance(requireContext()).userDao()
-            val updateUser = userDao.findById(id)
-
-            for ((index, user) in users.withIndex()) {
-                if (updateUser.id == user.id) {
-                    users[index] = updateUser
-                    viewAdapter.notifyItemChanged(index)
-                    break
+            GlobalScope.launch (Dispatchers.Main) {
+                val updateUser = userDao.findById(id)
+                for ((index, user) in users.withIndex()) {
+                    if (updateUser.id == user.id) {
+                        users[index] = updateUser
+                        viewAdapter.notifyItemChanged(index)
+                        break
+                    }
                 }
             }
         }
@@ -98,9 +107,11 @@ class UserListFragment: Fragment(), NewUserDialogFragment.NoticeDialogListener {
         return when (item.itemId) {
             R.id.action_reset -> {
                 val dao = UserDatabase.getInstance(requireContext()).userDao()
-                dao.removeAll()
-                users.clear()
-                viewAdapter.notifyDataSetChanged()
+                GlobalScope.launch(Dispatchers.Main) {
+                    dao.removeAll()
+                    users.clear()
+                    viewAdapter.notifyDataSetChanged()
+                }
                 return true
             }
             R.id.action_github -> {
