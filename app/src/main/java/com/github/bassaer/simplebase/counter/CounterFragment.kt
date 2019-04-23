@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import com.github.bassaer.simplebase.R
 import com.github.bassaer.simplebase.data.User
 import com.github.bassaer.simplebase.data.UserDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class CounterFragment: Fragment() {
 
@@ -21,9 +24,11 @@ class CounterFragment: Fragment() {
         textView = view.findViewById(R.id.text)
         val userId: String = arguments?.getString(ARGUMENT_USER_ID) ?: return view
         val dao = UserDatabase.getInstance(requireContext()).userDao()
-        user = dao.findById(userId)
 
-        textView.text = user.count.toString()
+        GlobalScope.launch(Dispatchers.Main) {
+            user = dao.findById(userId)
+            textView.text = user.count.toString()
+        }
 
         val fab: View? = activity?.findViewById(R.id.fab)
         fab?.setOnClickListener {
@@ -43,7 +48,9 @@ class CounterFragment: Fragment() {
     override fun onPause() {
         super.onPause()
         val dao = UserDatabase.getInstance(requireContext()).userDao()
-        dao.save(user)
+        GlobalScope.launch(Dispatchers.Main) {
+            dao.save(user)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

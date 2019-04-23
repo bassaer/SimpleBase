@@ -11,7 +11,7 @@ class GitHubAdapter(private val repos: MutableList<RepoResponse>): RecyclerView.
 
     class RepoViewHolder(cell: View): RecyclerView.ViewHolder(cell) {
         var repoName: TextView = cell.findViewById(R.id.repo_name)
-        var repoLanguagew: TextView = cell.findViewById(R.id.repo_language)
+        var repoLanguage: TextView = cell.findViewById(R.id.repo_language)
         var repoStarts: TextView = cell.findViewById(R.id.repo_stars)
     }
 
@@ -24,7 +24,7 @@ class GitHubAdapter(private val repos: MutableList<RepoResponse>): RecyclerView.
 
     override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
         holder.repoName.text = repos[position].name
-        holder.repoLanguagew.text = repos[position].language
+        holder.repoLanguage.text = repos[position].language
         holder.repoStarts.text = repos[position].star.toString()
     }
 }

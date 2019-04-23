@@ -9,13 +9,13 @@ import androidx.room.Update
 @Dao
 interface UserDao {
     @Insert(onConflict = REPLACE)
-    fun create(user: User)
+    suspend fun create(user: User)
     @Update
-    fun save(user: User)
+    suspend fun save(user: User)
     @Query("SELECT * FROM user WHERE id = :userId")
-    fun findById(userId: String): User
+    suspend fun findById(userId: String): User
     @Query("SELECT * FROM user")
-    fun findAll(): MutableList<User>
+    suspend fun findAll(): MutableList<User>
     @Query("DELETE FROM user")
-    fun removeAll()
+    suspend fun removeAll()
 }
